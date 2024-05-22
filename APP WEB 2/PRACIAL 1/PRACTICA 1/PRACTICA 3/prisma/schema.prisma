@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+model Equipo {
+  id          Int      @id
+  nombre      String
+  pais        String
+  entrenador  String
+  estado      String   @default("Activo") // Cambiado el tipo de dato a String
+  partidos    Partido[]  
+}
+
+// 
+model Torneo {
+  id           Int       @id 
+  nombre       String
+  fechaInicio  DateTime
+  fechaFin     DateTime
+  lugar        String
+  estado       String   @default("Activo") // Cambiado el tipo de dato a String
+  partidos     Partido[] 
+}
+
+
+model Partido {
+  id                Int      @id 
+  equipoLocal       Equipo   @relation(fields: [equipoLocalId], references: [id])
+  equipoLocalId     Int
+  equipoVisitanteId Int
+  fecha             DateTime
+  resultado         String
+  estado            String   @default("Activo") // Cambiado el tipo de dato a String
+  torneo            Torneo   @relation(fields: [torneoId], references: [id])
+  torneoId          Int
+}
+
