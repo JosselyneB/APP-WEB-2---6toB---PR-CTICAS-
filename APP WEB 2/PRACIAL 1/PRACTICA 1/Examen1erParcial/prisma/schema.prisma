@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model Secuencia {
+  ID         Int      @id
+  Nombres    String
+  Secuencias Int
+}
+
+model Equipo {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  pais        String
+  entrenador  String
+  estado      String   @default("Activo")
+  partidos    Partido[]
+}
+
+model Torneo {
+  id           Int       @id @default(autoincrement())
+  nombre       String
+  fechaInicio  DateTime
+  fechaFin     DateTime
+  lugar        String
+  estado       String   @default("Activo")
+  partidos     Partido[]
+}
+
+model Partido {
+  id                Int      @id @default(autoincrement())
+  equipoLocal       Equipo   @relation(fields: [equipoLocalId], references: [id])
+  equipoLocalId     Int
+  equipoVisitanteId Int
+  fecha             DateTime
+  resultado         String
+  estado            String   @default("Activo")
+  torneo            Torneo   @relation(fields: [torneoId], references: [id])
+  torneoId          Int
+}
+
+
+
+
